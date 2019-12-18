@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # Default values
-PROFILE_FILE="profiles.csv"
 VIRTUAL=ifb0
 DEFAULT_DOWNLOAD="40000mbit"
 DEFAULT_UPLOAD="40000mbit"
@@ -72,11 +71,9 @@ else
         echo "Imposing shaping on interface: $INTERFACE"
         
         # Search for profile
-        search=$( cat $PROFILE_FILE |  tail -n +2 | \
-                  awk -F , "(\$1==\"$OPERATOR\") && (\$2==\"$COUNTRY\") \
-                         && (\$3==\"$TECHNOLOGY\") && (\$4==\"$QUALITY\")" )
-        
-        if [ -z "$search" ] ; then
+        values=$( python3 sample_from_distribution.py $OPERATOR $COUNTRY $TECHNOLOGY $QUALITY )
+                
+        if [ "$values" = "error" ] ; then
             echo "Cannot find selected profile"
         else
         
@@ -87,15 +84,14 @@ else
             echo "    Technology: $TECHNOLOGY"
             echo "    Quality:    $QUALITY"
             
-            DOWNLOAD=$(echo $search | cut -d , -f 5)
-            UPLOAD=$(echo $search | cut -d , -f 6)
-            RTT_AVG=$(echo $search | cut -d , -f 7)
-            RTT_SDEV=$(echo $search | cut -d , -f 8)
+            DOWNLOAD=$(echo $values | cut -d " " -f 1)
+            UPLOAD=$(echo $values | cut -d " " -f 2)
+            RTT_AVG=$(echo $values | cut -d " " -f 3)
             
             echo "Parameters are:"
             echo "    Download [kbps]: $DOWNLOAD"
             echo "    Upload [kbps]:   $UPLOAD"
-            echo "    RTT [ms]:        $RTT_AVG +- $RTT_SDEV"
+            echo "    RTT [ms]:        $RTT_AVG"
             
             # Impose shaping
             
@@ -130,7 +126,7 @@ else
             go tc class add dev $INTERFACE parent 1:  classid 1:1  htb rate $DEFAULT_UPLOAD
             go tc class add dev $INTERFACE parent 1:1 classid 1:11 htb rate ${UPLOAD}kbit
             # Delay
-            go tc qdisc add dev $INTERFACE parent 1:11 handle 10: netem delay ${RTT_AVG}ms ${RTT_SDEV}ms distribution normal 
+            go tc qdisc add dev $INTERFACE parent 1:11 handle 10: netem delay ${RTT_AVG}ms
             
         fi                    
         

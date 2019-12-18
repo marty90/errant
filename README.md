@@ -8,6 +8,8 @@ Realistic Emulation of Mobile Networks
 This tool runs on Linux, and builds on top of the `tc-netem` tool.
 It also uses the `ifb` kernel module to shape incoming traffic.
 
+You need also Python3 with update versions of `pandas` and `scipy`.
+
 The tool is able to emulate profiles available in the `profiles.csv` file.
 Check it to have the complete list.
 
