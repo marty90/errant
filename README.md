@@ -19,7 +19,7 @@ You need to execute it as `root`.
 
 Usage:
 ```
-apply_shaping.sh -o operator -c country -t technology -q quality -i interface [-r] [-d] [-h]
+apply_shaping.sh -o operator -c country -t technology -q quality -i interface [-p period] [-r] [-d] [-h]
 ```
 
 Parameters are:
@@ -28,6 +28,7 @@ Parameters are:
 * `technology`: whether to emulate 3G or 4G.
 * `quality`: signal quality to emulate: bad, medium or good.
 * `interface`: the name of the interface where to apply shaping.
+* `period`: change network conditions periodically after `period` seconds.
 * `-r`: stop doing traffic shaping.
 * `-d`: dry run (only print all commands that would execute).
 * `-h`: print help.
