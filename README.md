@@ -1,17 +1,18 @@
-Mobile Network Emulator
-=======================
+ERRANT: EmulatoR of Radio Access NeTworks
+=========================================
 
-Realistic Emulation of Mobile Networks
+ERRANT is an advanced emulator of radio access networks, tuned thank to a large-scale measurement campaign on operational mobile networks.
+
+It uses `tc-netem` to install traffic shaping policies, allowing the user to choose between 26 profiles that differ for emulated operator, RAT (3G or 4G) and signal quality. The exact paramenters of the shaping policies are dynamic, in the sense that they may vary at each run based on the values observed on the real network. ERRANT can also vary parameters dynamically (every `n` seconds) to emulate variable networks.
 
 ## Prerequisites
 
 This tool runs on Linux, and builds on top of the `tc-netem` tool.
 It also uses the `ifb` kernel module to shape incoming traffic.
 
-You need also Python3 with update versions of `pandas` and `scipy`.
+You need also Python3 with updated versions of `pandas` and `scipy`.
 
-The tool is able to emulate profiles available in the `profiles.csv` file.
-Check it to have the complete list.
+ERRANT is able to emulate profiles available in the `profiles.csv` file, that describes their average values for latency, upload and download bandwidth. Check it to have the complete list.
 
 ## Usage
 
@@ -19,7 +20,7 @@ You need to execute it as `root`.
 
 Usage:
 ```
-apply_shaping.sh -o operator -c country -t technology -q quality -i interface [-p period] [-r] [-d] [-h]
+errant -o operator -c country -t technology -q quality -i interface [-p period] [-r] [-d] [-h]
 ```
 
 Parameters are:
@@ -29,10 +30,13 @@ Parameters are:
 * `quality`: signal quality to emulate: bad, medium or good.
 * `interface`: the name of the interface where to apply shaping.
 * `period`: change network conditions periodically after `period` seconds.
-* `-r`: stop doing traffic shaping.
+* `-r`: stop doing traffic shaping. Remove all the shaping policies.
 * `-d`: dry run (only print all commands that would execute).
 * `-h`: print help.
 
 ## Limitations
 
 Due to the use of the `ifb` kernel module, you can impose shaping to one interface at a time.
+
+
+
