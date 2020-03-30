@@ -38,5 +38,6 @@ Parameters are:
 
 Due to the use of the `ifb` kernel module, you can impose shaping to one interface at a time.
 
+## Creation of new profiles
 
-
+If you want to create new profiles based on other measurements, you can use the scripts provided in the `profile_creation` directory, where we provide the code and instructions to generate a new profile file compatible with ERRANT.
