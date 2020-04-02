@@ -45,7 +45,7 @@ Parameters are:
 * `scenario.csv`: the name of the csv file containing the list of profiles to be emulated.
 * `interface`: the name of the interface where to apply shaping.
 
-The `scenario.csv` is a csv file where each row describe:
+The `scenario.csv` is a csv file where each row describes:
 * `operator`: the Mobile Network Operator to emulate.
 * `country`: the country network to emulate.
 * `technology`: whether to emulate 3G or 4G.
