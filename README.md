@@ -46,12 +46,6 @@ Run simulation with Norway Telenor 4G Good profile and periodically change netwo
 errant -o Telenor -c Norway -t 4G -q Good -p 10 -i eth0 
 ```
 
-Run simulation with Norway Telenor 4G Good profile and periodically change network condition every 10s, changing among three different profiles. Impose the proofile to eth0 interface:
-```
-errant -o Telenor -c Norway -t 4G -q Good -p 10 -pr [4G-BAD, 3G-GOOD, 3G-MEDIUM] -i eth0 
-```
-
-
 ## Limitations
 
 Due to the use of the `ifb` kernel module, you can impose shaping to one interface at a time.
