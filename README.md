@@ -27,7 +27,7 @@ errant -o operator -c country -t technology -q quality -i interface [-p period] 
 Parameters are:
 * `operator`: the Mobile Network Operator to emulate.
 * `country`: the country network to emulate.
-* `technology`: whether to emulate 3G or 4G.
+* `technology`: whether to emulate 3g or 4g.
 * `quality`: signal quality to emulate: bad, medium or good.
 * `interface`: the name of the interface where to apply shaping.
 * `period`: change network conditions periodically after `period` seconds.
@@ -48,7 +48,7 @@ Parameters are:
 The `scenario.csv` is a csv file where each row describes:
 * `operator`: the Mobile Network Operator to emulate.
 * `country`: the country network to emulate.
-* `technology`: whether to emulate 3G or 4G.
+* `technology`: whether to emulate 3g or 4g.
 * `quality`: signal quality to emulate: bad, medium or good.
 * `period`: change network conditions periodically after `period` seconds.
 * `expire`: move to the next network profile after `expire` seconds.
