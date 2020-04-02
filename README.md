@@ -3,7 +3,8 @@ ERRANT: EmulatoR of Radio Access NeTworks
 
 ERRANT is an advanced emulator of radio access networks, tuned thank to a large-scale measurement campaign on operational mobile networks.
 
-It uses `tc-netem` to install traffic shaping policies, allowing the user to choose between 26 profiles that differ for emulated operator, RAT (3G or 4G) and signal quality. The exact paramenters of the shaping policies are dynamic, in the sense that they may vary at each run based on the values observed on the real network. ERRANT can also vary parameters dynamically (every `n` seconds) to emulate variable networks.
+It uses `tc-netem` to install traffic shaping policies, allowing the user to choose between 32 profiles that differ for emulated operator, RAT (3G or 4G) and signal quality. The exact parameters of the shaping policies are dynamic, in the sense that they may vary at each run based on the values observed on the real network. ERRANT can also vary parameters dynamically (every `n` seconds) to emulate variable networks.
+
 
 ## Prerequisites
 
@@ -34,22 +35,24 @@ Parameters are:
 * `-d`: dry run (only print all commands that would execute).
 * `-h`: print help.
 
+Note that to use the operator-agnostic models, you must specify `universal` for operator and country.
+
 ## Examples
 
 Run simulation with Norway Telenor 4G Good profile. Impose the proofile to eth0 interface:
 ```
-errant -o Telenor -c Norway -t 4G -q Good -i eth0 
+errant -o telenor -c norway -t 4g -q good -i eth0 
 ```
 
 Run simulation with Norway Telenor 4G Good profile and periodically change network condition every 10s. Impose the proofile to eth0 interface:
 ```
-errant -o Telenor -c Norway -t 4G -q Good -p 10 -i eth0 
+errant -o telenor -c norway -t 4g -q good -p 10 -i eth0 
 ```
 
 ## Limitations
 
 Due to the use of the `ifb` kernel module, you can impose shaping to one interface at a time.
 
-## Creation of new profiles
+## Creation of new models
 
-If you want to create new profiles based on other measurements, you can use the scripts provided in the `profile_creation` directory, where we provide the code and instructions to generate a new profile file compatible with ERRANT.
+If you want to create new models based on other measurements, you can use the scripts provided in the `model_creation` directory, where we provide the code and instructions to generate a new model file compatible with ERRANT.
