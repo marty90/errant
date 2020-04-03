@@ -62,7 +62,7 @@ if [ "$REMOVE" = true ]; then
         done
         
     else
-        echo "When removing rules, all other arguemnts must be empty"
+        echo "When removing rules, all other arguments must be empty"
     fi
     
 else

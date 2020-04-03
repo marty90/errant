@@ -4,7 +4,7 @@ ERRANT: EmulatoR of Radio Access NeTworks
 ERRANT is an advanced emulator of radio access networks, tuned thank to a large-scale measurement campaign on operational mobile networks.
 
 It uses `tc-netem` to install traffic shaping policies, allowing the user to choose between 32 profiles that differ for emulated operator, RAT (3g or 4g) and signal quality. The exact parameters of the shaping policies are dynamic, in the sense that they may vary at each run based on the values observed on the real network. 
-The avaiable profiles are saved in the `model.pickle` file. ERRANT can also vary parameters dynamically (every `n` seconds) to emulate variable networks, and simulate moving scenario using the `ApplyScenario` scipt. 
+The available profiles are saved in the `model.pickle` file. ERRANT can also vary parameters dynamically (every `n` seconds) to emulate variable networks, and simulate moving scenario using the `ApplyScenario` script. 
 
 ## Prerequisites
 
@@ -19,7 +19,7 @@ ERRANT is able to emulate profiles available in the `profiles.csv` file, that de
 
 You need to execute it as `root`.
 
-Usage ERRANT for emluation without a scenario:
+Usage ERRANT for emulation without a scenario:
 ```
 errant -o operator -c country -t technology -q quality -i interface [-p period] [-r] [-d] [-h]
 ```
@@ -37,7 +37,7 @@ Parameters are:
 
 Note that to use the operator-agnostic models, you must specify `universal` for operator and country.
 
-Usage ERRANT for emluation with a scenario:
+Usage ERRANT for emulation with a scenario:
 ```
 ApplyScenario.py -s scenario.csv -i interface
 ```
@@ -53,19 +53,37 @@ The `scenario.csv` is a csv file where each row describes:
 * `period`: change network conditions periodically after `period` seconds.
 * `expire`: move to the next network profile after `expire` seconds.
 
+## Running a trace from file
+
+You can use our convenience script `trace_run` to run a trace-based emulation, in which different models can be applied as time passes. The syntax of the command is:
+
+```
+trace_run [-h] [-f SCENARIO_FILE] -i INTERFACE [-d] [-n]
+
+Arguments:
+  -h, --help        show this help message and exit
+  -f SCENARIO_FILE  File with the trace to run
+  -i INTERFACE      Destination interface
+  -d                Make a dry run
+  -n                Leave last shaping policy on, when ending
+```
+
+The scenario file must be in `csv` format and contain for each line the specific of the model to apply (operator, country, rat and quality). It must also contain how long to keep the model on (`duration`). It can finally contain an eventual `period` to change network conditions periodically. Leave it blank or `-` to avoid doing this. See the file `trace_example.csv` for an example.
+
+
 ## Examples
 
-Run simulation with Norway Telenor 4G Good profile. Impose the proofile to eth0 interface:
+Run simulation with Norway Telenor 4G Good profile. Impose the profile to eth0 interface:
 ```
 errant -o telenor -c norway -t 4g -q good -i eth0 
 ```
 
-Run simulation with Norway Telenor 4G Good profile and periodically change network condition every 10s. Impose the proofile to eth0 interface:
+Run simulation with Norway Telenor 4G Good profile and periodically change network condition every 10s. Impose the profile to eth0 interface:
 ```
 errant -o telenor -c norway -t 4g -q good -p 10 -i eth0 
 ```
 
-Usage ERRANT for emluation with a scenario:
+Usage ERRANT for emulation with a scenario:
 ```
 ApplyScenario.py -s scenario.csv -i eth0
 ```
