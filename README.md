@@ -78,6 +78,11 @@ Run simulation with Norway Telenor 4G Good profile. Impose the profile to eth0 i
 errant -o telenor -c norway -t 4g -q good -i eth0 
 ```
 
+Run simulation with universal 4G Good profile. Impose the profile to eth0 interface:
+```
+errant -o universal -c universal -t 4g -q good -i eth0 
+```
+
 Run simulation with Norway Telenor 4G Good profile and periodically change network condition every 10s. Impose the profile to eth0 interface:
 ```
 errant -o telenor -c norway -t 4g -q good -p 10 -i eth0 
