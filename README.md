@@ -50,8 +50,8 @@ The `scenario.csv` is a csv file where each row describes:
 * `country`: the country network to emulate.
 * `technology`: whether to emulate 3g or 4g.
 * `quality`: signal quality to emulate: bad, medium or good.
+* `duration`: move to the next network profile after `duration` seconds.
 * `period`: change network conditions periodically after `period` seconds.
-* `expire`: move to the next network profile after `expire` seconds.
 
 ## Running a trace from file
 
