@@ -6,12 +6,19 @@ ERRANT is an advanced emulator of radio access networks, tuned thank to a large-
 It uses `tc-netem` to install traffic shaping policies, allowing the user to choose between 32 profiles that differ for emulated operator, RAT (3g or 4g) and signal quality. The exact parameters of the shaping policies are dynamic, in the sense that they may vary at each run based on the values observed on the real network. 
 The available profiles are saved in the `model.pickle` file. ERRANT can also vary parameters dynamically (every `n` seconds) to emulate variable networks, and simulate moving scenario using the `ApplyScenario` script. 
 
+An overview of the available profiles is depicted below:
+![ERRANT Framework](errant_profiles.jpg)
+
+
+Tapez un message
+
+
 ## Prerequisites
 
 This tool runs on Linux, and builds on top of the `tc-netem` tool.
 It also uses the `ifb` kernel module to shape incoming traffic.
 
-You need also Python3 with updated versions of `pandas` and `scipy`.
+You need also Python3 with updated versions of `pandas==0.24.2` and `scipy`.
 
 ERRANT is able to emulate profiles available in the `profiles.csv` file, that describes their average values for latency, upload and download bandwidth. Check it to have the complete list.
 
