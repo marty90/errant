@@ -25,8 +25,9 @@ COUNTRY=""
 TECHNOLOGY=""
 QUALITY=""
 INTERFACE=""
+LOGFILE=""
 
-while getopts  "o:c:t:q:i:p:rhd" flag
+while getopts  "o:c:t:q:i:p:l:rhd" flag
 do
     case $flag in
         o) OPERATOR=$OPTARG;;
@@ -34,13 +35,18 @@ do
         t) TECHNOLOGY=$OPTARG;;
         q) QUALITY=$OPTARG;;
         i) INTERFACE=$OPTARG;;
+        l) LOGFILE=$OPTARG;;
         r) REMOVE=true;;
         d) DRY_RUN=true;;
         p) PERIODIC=$OPTARG;;
-        h) echo "Usage: errant -o operator -c country -t technology -q quality -i interface [-p period] [-r] [-d] [-h]" ; exit ;;
+        h) echo "Usage: errant -o operator -c country -t technology -q quality -i interface [-p period] [-l logfile] [-r] [-d] [-h]" ; exit ;;
     esac
 done
 
+# Log file header
+if [ ! -z $LOGFILE ] ; then
+    echo "time,operator,country,technology,quality,download,upload,rtt" > $LOGFILE
+fi
 
 # Remove rules
 if [ "$REMOVE" = true ]; then
@@ -105,6 +111,11 @@ else
                 echo "    Download [kbps]: $DOWNLOAD"
                 echo "    Upload [kbps]:   $UPLOAD"
                 echo "    RTT [ms]:        $RTT_AVG"
+                
+                # Write Log if needed
+                if [ ! -z $LOGFILE ] ; then
+                    echo "$(date +%s),$OPERATOR,$COUNTRY,$TECHNOLOGY,$QUALITY,$DOWNLOAD,$UPLOAD,$RTT_AVG" >> $LOGFILE
+                fi
                 
                 # Impose shaping
                 
