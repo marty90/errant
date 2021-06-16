@@ -6,7 +6,7 @@ ERRANT is an advanced emulator of radio access networks, tuned thank to a large-
 It uses `tc-netem` to install traffic shaping policies, allowing the user to choose between 32 profiles that differ for emulated operator, RAT (3g or 4g) and signal quality. The exact parameters of the shaping policies are dynamic, in the sense that they may vary at each run based on the values observed on the real network. 
 The available profiles are saved in the `model.pickle` file. ERRANT can also vary parameters dynamically (every `n` seconds) to emulate variable networks, and simulate moving scenario using the `ApplyScenario` script. 
 
-An overview of the available profiles is depicted below:
+An overview of the available profiles is depicted below, while you can find more in our [paper](https://arxiv.org/abs/2106.06335).
 ![ERRANT Framework](errant_profiles.jpg)
 
 
@@ -123,3 +123,22 @@ We still do not have profile describing 5G networks. We are working for running 
 ## Creation of new models
 
 If you want to create new models based on other measurements, you can use the scripts provided in the `model_creation` directory, where we provide the code and instructions to generate a new model file compatible with ERRANT.
+
+## The ERRANT Paper
+
+ERRANT has been proposed in our paper: *Trevisan, Martino, Ali Safari Khatouni, and Danilo Giordano. "ERRANT: Realistic emulation of radio access networks." Computer Networks 176 (2020): 107289.* It is avaiable on [ScienceDirect](https://www.sciencedirect.com/science/article/pii/S1389128620301420) and on [ArXiv](https://arxiv.org/abs/2106.06335). To cite it in your work, use this BibTex entry:
+
+```
+@article{errant,
+  title={ERRANT: Realistic emulation of radio access networks},
+  author={Trevisan, Martino and Khatouni, Ali Safari and Giordano, Danilo},
+  journal={Computer Networks},
+  volume={176},
+  pages={107289},
+  year={2020},
+  publisher={Elsevier},
+  issn = {1389-1286},
+}
+
+```
+
