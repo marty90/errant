@@ -26,7 +26,7 @@ While GeoSat with:
 This tool runs on Linux, and builds on top of the `tc-netem` tool.
 It also uses the `ifb` kernel module to shape incoming traffic.
 
-You need also Python3 with updated versions of `pandas==1.2.4` and `scipy==1.6.3`.
+You need also Python3 with updated versions of `pandas==1.4.4` and `scipy==1.6.3`.
 
 ERRANT is able to emulate profiles available in the `profiles.csv` file, that describes their average values for latency, upload and download bandwidth. Check it to have the complete list, or see the image above.
 
