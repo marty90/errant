@@ -9,7 +9,17 @@ The available profiles are saved in the `model.pickle` file. ERRANT can also var
 An overview of the available profiles is depicted below, while you can find more in our [paper](https://arxiv.org/abs/2106.06335).
 ![ERRANT Framework](errant_profiles.jpg)
 
+**NEW**: Profiles available for GeoSat and StarLink LeoSat. GeoSat comes from a large measurement campaign with Geostationary SatCom equipments, while StarLink from a measurement campaign using a regular StarLink device and subscription.
 
+StarLink can be emulated with:
+```
+errant -o starlink -c universal -t leosat -q universal -i <IFACE>
+```
+
+While GeoSat with:
+```
+./errant -o universal -c universal -t geosat -q universal -i <IFACE> 
+```
 
 ## Prerequisites
 
