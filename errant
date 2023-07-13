@@ -120,8 +120,7 @@ else
                 # Impose shaping
                 
                 # Create virtual interfaces
-                go rmmod ifb 2>/dev/null
-                go modprobe ifb numifbs=1
+                go ip link add $VIRTUAL type ifb
                 go ip link set dev $VIRTUAL up
                 
                 # Create rules
