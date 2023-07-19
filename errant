@@ -32,7 +32,7 @@ RTT_AVG=""
 LOSS=""
 
 
-while getopts  "o:c:t:q:i:p:l:u:d:R:rhd" flag
+while getopts  "o:c:t:q:i:p:l:L:u:d:R:rhd" flag
 do
     case $flag in
         o) OPERATOR=$OPTARG;;
@@ -53,8 +53,8 @@ do
 done
 
 # Log file header
-if [ -n $LOGFILE ] ; then
-    echo "time,operator,country,technology,quality,download,upload,rtt,loss" > $LOGFILE
+if [ ! -z $LOGFILE ] ; then
+    echo "time,operator,country,technology,quality,download,upload,rtt,loss" > "$LOGFILE"
 fi
 
 # Remove rules
@@ -84,7 +84,7 @@ if [ "$REMOVE" = true ]; then
 else
 
     DOWNLOAD=${DOWNLOAD:-UPLOAD}
-    if [ -n "$UPLOAD" ] && [ -n "$DOWNLOAD" ] && [ -n "$RTT_AVG" ]; then
+    if [ ! -z "$UPLOAD" ] && [ ! -z "$DOWNLOAD" ] && [ ! -z "$RTT_AVG" ]; then
         OPERATOR=${OPERATOR:-"universal"}
         COUNTRY=${COUNTRY:-"universal"}
         TECHNOLOGY=${TECHNOLOGY:-"universal"}
@@ -99,7 +99,7 @@ else
     else
         echo "Imposing shaping on interface: $INTERFACE"
         
-        if [ -n $PERIODIC ] ; then
+        if [ ! -z $PERIODIC ] ; then
             if ! [[ "$PERIODIC" =~ ^[0-9]+$ ]] ; then
                 echo "Wrong periodic shaping value. Only integers allowed."
                 exit
@@ -123,7 +123,7 @@ else
                 RTT_AVG=$(echo $values | cut -d " " -f 3)
             fi
 
-            if [ -n $LOSS ]; then
+            if [ ! -z $LOSS ]; then
                 if ! [[ "$LOSS" =~ ^[0-9]+$ ]]; then
                     echo "Wrong loss shaping value. Only integers allowed. Defaulting to 0%."
                     LOSS="0"
@@ -146,7 +146,7 @@ else
             echo "    LOSS [%]:        $LOSS"
             
             # Write Log if needed
-            if [ -n $LOGFILE ] ; then
+            if [ ! -z $LOGFILE ] ; then
                 echo "$(date +%s),$OPERATOR,$COUNTRY,$TECHNOLOGY,$QUALITY,$DOWNLOAD,$UPLOAD,$RTT_AVG,$LOSS" >> $LOGFILE
             fi
             
@@ -185,7 +185,7 @@ else
             # Delay
             go tc qdisc add dev $INTERFACE parent 1:11 handle 10: netem delay ${RTT_AVG}ms
             # Loss
-            go tc qdisc add dev $VIRTUAL parent 2:10 handle 20: netem loss random ${LOSS}
+            go tc qdisc add dev $INTERFACE parent 10: handle 11: netem loss random ${LOSS}
 
             
             if [ -z $PERIODIC ] ; then
