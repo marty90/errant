@@ -2,9 +2,6 @@
 
 # Default values
 VIRTUAL=ifb0
-DEFAULT_DOWNLOAD="40000mbit"
-DEFAULT_UPLOAD="40000mbit"
-DEFAULT_RTT="0ms"
 
 # Utility Function
 function go() {
@@ -32,7 +29,7 @@ RTT_AVG=""
 LOSS=""
 
 
-while getopts  "o:c:t:q:i:p:l:L:u:d:R:rhd" flag
+while getopts  "o:c:t:q:i:O:p:l:L:u:d:R:rhd" flag
 do
     case $flag in
         o) OPERATOR=$OPTARG;;
@@ -40,15 +37,16 @@ do
         t) TECHNOLOGY=$OPTARG;;
         q) QUALITY=$OPTARG;;
         i) INTERFACE=$OPTARG;;
+        O) VIRTUAL=$OPTARG;;
         l) LOGFILE=$OPTARG;;
         u) UPLOAD=$OPTARG;;
         d) DOWNLOAD=$OPTARG;;
         R) RTT_AVG=$OPTARG;;
-        L) LOSE=$OPTARG;;
+        L) LOSS=$OPTARG;;
         r) REMOVE=true;;
         d) DRY_RUN=true;;
         p) PERIODIC=$OPTARG;;
-        h) echo "Usage: errant { -o operator -c country -t technology -q quality | -u upload_speed [-d download_speed] -R RTT } -i interface [-p period] [-L loss] [-l logfile] [-r] [-d] [-h]" ; exit ;;
+        h) echo "Usage: errant { -o operator -c country -t technology -q quality | -u upload_speed [-d download_speed] -R RTT } -i interface [-O virtual_interface] [-p period] [-L loss] [-l logfile] [-r] [-d] [-h]" ; exit ;;
     esac
 done
 
@@ -63,7 +61,8 @@ if [ "$REMOVE" = true ]; then
     # Check arguments are correct
     if [ -z "$OPERATOR" ] && [ -z "$COUNTRY" ] && [ -z "$TECHNOLOGY" ] \
                           && [ -z "$QUALITY" ] && [ -z "$INTERFACE" ] \
-                          && [ -z "$UPLOAD" ] && [ -z "$DOWNLOAD" ] && [ -z "$RTT_AVG" ]; then
+                          && [ -z "$UPLOAD" ] && [ -z "$DOWNLOAD" ] \
+                          && [ -z "$RTT_AVG" ] && [ -z "$LOSS" ]; then
         echo "Removing shaping rules"
         
         # Remove module IFB
@@ -109,7 +108,7 @@ else
         fi
         
         while true ; do
-            if [ -z "$UPLOAD" ] && [ -z "$DOWNLOAD" ] && [ -z "$RTT_AVG" ]; then
+            if [ -z "$UPLOAD" ] || [ -z "$DOWNLOAD" ] || [ -z "$RTT_AVG" ]; then
                 # Search for profile
                 values=$( python3 sample_from_distribution.py $OPERATOR $COUNTRY $TECHNOLOGY $QUALITY )
                         
@@ -170,22 +169,10 @@ else
 
 
             # INCOMING
-            # Speed
-            go tc qdisc add dev $VIRTUAL root handle 2: htb default 10
-            go tc class add dev $VIRTUAL parent 2:  classid 2:1  htb rate $DEFAULT_DOWNLOAD
-            go tc class add dev $VIRTUAL parent 2:1 classid 2:10 htb rate ${DOWNLOAD}kbit
-            # Loss
-            go tc qdisc add dev $VIRTUAL parent 2:10 handle 20: netem loss random ${LOSS}
+            go tc qdisc add dev $VIRTUAL root netem loss random $LOSS rate ${DOWNLOAD}kbit
 
             # OUTGOING
-            # Speed
-            go tc qdisc add dev $INTERFACE root handle 1: htb default 11
-            go tc class add dev $INTERFACE parent 1:  classid 1:1  htb rate $DEFAULT_UPLOAD
-            go tc class add dev $INTERFACE parent 1:1 classid 1:11 htb rate ${UPLOAD}kbit
-            # Delay
-            go tc qdisc add dev $INTERFACE parent 1:11 handle 10: netem delay ${RTT_AVG}ms
-            # Loss
-            go tc qdisc add dev $INTERFACE parent 10: handle 11: netem loss random ${LOSS}
+            go tc qdisc add dev $INTERFACE root netem loss random $LOSS rate ${UPLOAD}kbit delay ${RTT_AVG}ms
 
             
             if [ -z $PERIODIC ] ; then

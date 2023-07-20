@@ -1,0 +1,26 @@
+ARG type
+
+FROM alpine AS base
+
+RUN apk add iperf3
+
+
+FROM base AS client
+
+RUN  apk add iproute2
+
+ENV SERVER=192.168.0.2
+
+COPY client.sh /client.sh
+
+ENTRYPOINT /client.sh
+
+
+FROM base AS server
+
+EXPOSE 5201
+
+ENTRYPOINT iperf3 -s
+
+
+FROM ${type}

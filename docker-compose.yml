@@ -1,0 +1,53 @@
+version: "3.9"
+
+services:
+
+  # The network shapping is done here on the interface eth0 (that connect to Internet and the server)
+  gateway:
+    image: gateway
+    build: .
+    env_file: example/network.env
+    networks:
+      - client
+      - gateway
+    depends_on:
+      - server
+    cap_add:
+      - NET_ADMIN
+
+  server:
+    image: server
+    build:
+      context: example
+      args:
+        type: server
+    networks:
+      gateway:
+        ipv4_address: 192.168.0.2
+
+  client:
+    image: client
+    build:
+      context: example
+      args:
+        type: client
+    env_file: example/network.env
+    environment:
+      SERVER: 192.168.0.2
+    depends_on:
+      - gateway
+    networks:
+      - client
+    cap_add:
+      - NET_ADMIN
+
+# The naming #_ allows us to be sure that gateway will be the first network connect to the gateway and as such is on the interface eth0 
+networks:
+  client:
+    name: 2_client
+  gateway:
+    name: 1_gateway
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.0.0/24
