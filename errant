@@ -179,6 +179,9 @@ else
                 break
             else
                 echo "Sleeping $PERIODIC seconds..."
+                UPLOAD=""
+                DOWNLOAD=""
+                RTT_AVG=""
                 sleep $PERIODIC
             fi
                                
