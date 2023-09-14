@@ -1,0 +1,32 @@
+ARG type
+
+FROM alpine AS base
+
+LABEL maintainer "BRUNO Maxime <maxime.bruno@ens-lyon.fr>"
+
+RUN apk update \
+	&& apk add iperf3 \
+	&& rm -rf /var/cache/apk/*
+
+
+FROM base AS client
+
+RUN apk update \
+	&& apk add iproute2 \
+	&& rm -rf /var/cache/apk/*
+
+ENV SERVER=192.168.0.2
+
+COPY client.sh /client.sh
+
+ENTRYPOINT ["/client.sh"]
+
+
+FROM base AS server
+
+EXPOSE 5201
+
+ENTRYPOINT ["iperf3", "-s"]
+
+
+FROM ${type}
